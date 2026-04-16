@@ -23,14 +23,6 @@ export class QuerySchedulesDto {
   @IsOptional()
   date?: string;
 
-  @IsDateString()
-  @IsOptional()
-  createdAt?: string;
-
-  @IsDateString()
-  @IsOptional()
-  updatedAt?: string;
-
   @IsEnum(['price_asc', 'price_desc', 'date_asc', 'date_desc'], {
     message: 'Sort must be one of: price_asc, price_desc, date_asc, date_desc',
   })

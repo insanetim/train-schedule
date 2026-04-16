@@ -12,14 +12,21 @@ export class AuthService {
   ) {}
 
   /**
-   * Register a new user
-   * Hashes password with bcrypt and creates user account
+   * Register a new user and generate JWT token
+   * Hashes password with bcrypt, creates user account, and returns access token
    * @param dto - Registration data with email and password
-   * @returns Created user without password
+   * @returns JWT access token
    */
   async register({ email, password }: RegisterDto) {
     const hash = await bcrypt.hash(password, 10);
-    return this.usersService.create(email, hash);
+    const user = await this.usersService.create(email, hash);
+
+    return {
+      access_token: this.jwtService.sign({
+        sub: user.id,
+        email: user.email,
+      }),
+    };
   }
 
   /**

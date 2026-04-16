@@ -42,8 +42,13 @@ export class SchedulesService {
       // Case-insensitive location filtering
       from: from ? { contains: from, mode: 'insensitive' as const } : undefined,
       to: to ? { contains: to, mode: 'insensitive' as const } : undefined,
-      // Date filtering: exact date if specified, otherwise from today onwards
-      date: date ? { equals: new Date(date) } : { gte: today },
+      // Date filtering: date range if specified, otherwise from today onwards
+      date: date
+        ? {
+            gte: new Date(date),
+            lt: new Date(new Date(date).getTime() + 24 * 60 * 60 * 1000), // Next day
+          }
+        : { gte: today },
     };
 
     // Execute data query and count query in parallel for performance
@@ -59,7 +64,7 @@ export class SchedulesService {
                 ? { date: 'asc' }
                 : sort === 'date_desc'
                   ? { date: 'desc' }
-                  : { createdAt: 'desc' }, // Default sort by creation date
+                  : { date: 'asc' }, // Default sort by date ascending
         skip: (page - 1) * limit, // Pagination offset
         take: limit, // Items per page
       }),
