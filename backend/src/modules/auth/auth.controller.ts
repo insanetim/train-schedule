@@ -1,7 +1,7 @@
 import { Public } from '@common/decorators/public.decorator';
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CredentialsDto } from './dto';
+import { LoginDto, RegisterDto } from './dto';
 
 @Public()
 @Controller('auth')
@@ -10,13 +10,13 @@ export class AuthController {
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() credentials: CredentialsDto) {
-    return this.authService.register(credentials);
+  async register(@Body() dto: RegisterDto) {
+    return this.authService.register(dto);
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() credentials: CredentialsDto) {
-    return this.authService.login(credentials);
+  async login(@Body() dto: LoginDto) {
+    return this.authService.login(dto);
   }
 }
