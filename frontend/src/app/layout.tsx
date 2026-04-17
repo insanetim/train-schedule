@@ -1,6 +1,7 @@
 import Providers from "@/components/Providers"
 import type { Metadata } from "next"
 import { Roboto } from "next/font/google"
+import { Toaster } from "sonner"
 import "./globals.css"
 
 const roboto = Roboto({
@@ -31,7 +32,14 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+          />
+        </Providers>
       </body>
     </html>
   )

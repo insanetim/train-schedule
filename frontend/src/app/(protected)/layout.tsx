@@ -5,16 +5,16 @@ import { useRouter } from "next/navigation"
 import { PropsWithChildren, useEffect } from "react"
 
 export default function ProtectedLayout({ children }: PropsWithChildren) {
-  const { token } = useAuth()
+  const { token, loading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!token) {
+    if (!token && !loading) {
       router.replace("/auth")
     }
-  }, [token, router])
+  }, [token, loading, router])
 
-  if (!token) return null
+  if (!token || loading) return null
 
   return children
 }

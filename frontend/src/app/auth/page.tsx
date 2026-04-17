@@ -1,7 +1,12 @@
 "use client"
 
+import { useLoginMutation, useRegisterMutation } from "@/api/authApiSlice"
 import PasswordInput from "@/components/PasswordInput"
+import { useAuth } from "@/contexts/AuthContext"
+import showToast from "@/services/toast"
+import { getErrorMessage } from "@/utils/getErrorMessage"
 import { Box, Button, TextField } from "@mui/material"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 
 interface AuthFormData {
@@ -10,18 +15,39 @@ interface AuthFormData {
 }
 
 export default function Auth() {
+  const router = useRouter()
+  const { login } = useAuth()
+
+  const [loginTrigger, { isLoading: isLoginLoading }] = useLoginMutation()
+  const [registerTrigger, { isLoading: isRegisterLoading }] =
+    useRegisterMutation()
+
+  const isLoading = isLoginLoading || isRegisterLoading
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<AuthFormData>()
 
-  const handleLogin = (data: AuthFormData) => {
-    console.log("Login clicked", data)
+  const handleLogin = async (data: AuthFormData) => {
+    try {
+      const { access_token } = await loginTrigger(data).unwrap()
+      login(access_token)
+      router.push("/")
+    } catch (error) {
+      showToast.error(getErrorMessage(error))
+    }
   }
 
-  const handleRegister = (data: AuthFormData) => {
-    console.log("Register clicked", data)
+  const handleRegister = async (data: AuthFormData) => {
+    try {
+      const { access_token } = await registerTrigger(data).unwrap()
+      login(access_token)
+      router.push("/")
+    } catch (error) {
+      showToast.error(getErrorMessage(error))
+    }
   }
 
   return (
@@ -46,6 +72,7 @@ export default function Auth() {
         })}
         error={!!errors.email}
         helperText={errors.email?.message}
+        disabled={isLoading}
       />
       <PasswordInput
         {...register("password", {
@@ -67,6 +94,7 @@ export default function Auth() {
         })}
         error={!!errors.password}
         helperText={errors.password?.message}
+        disabled={isLoading}
       />
       <Box
         sx={{
@@ -85,6 +113,7 @@ export default function Auth() {
           size="large"
           onClick={handleSubmit(handleLogin)}
           sx={{ flex: 1 }}
+          disabled={isLoading}
         >
           Login
         </Button>
@@ -95,6 +124,7 @@ export default function Auth() {
           size="large"
           onClick={handleSubmit(handleRegister)}
           sx={{ flex: 1 }}
+          disabled={isLoading}
         >
           Register
         </Button>

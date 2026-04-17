@@ -4,6 +4,7 @@ import { LOCAL_STORAGE_KEYS } from "@/constants"
 import {
   createContext,
   PropsWithChildren,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -11,6 +12,7 @@ import {
 
 interface AuthContext {
   token: string | null
+  loading: boolean
   login: (token: string) => void
   logout: () => void
 }
@@ -18,30 +20,38 @@ interface AuthContext {
 const AuthContext = createContext<AuthContext | null>(null)
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(() => {
-    if (typeof window === "undefined") return null
-    return localStorage.getItem("token")
-  })
+  const [token, setToken] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  const login = (token: string) => {
+  useEffect(() => {
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN)
+    queueMicrotask(() => {
+      if (token) {
+        setToken(token)
+      }
+      setLoading(false)
+    })
+  }, [])
+
+  const login = useCallback((token: string) => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, token)
     setToken(token)
-  }
+  }, [])
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN)
     setToken(null)
-  }
+  }, [])
 
   useEffect(() => {
     const handler = () => logout()
     window.addEventListener("unauthorized", handler)
 
     return () => window.removeEventListener("unauthorized", handler)
-  }, [])
+  }, [logout])
 
   return (
-    <AuthContext.Provider value={{ token, login, logout }}>
+    <AuthContext.Provider value={{ token, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

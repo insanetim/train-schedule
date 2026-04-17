@@ -18,6 +18,11 @@ export class AuthService {
    * @returns JWT access token
    */
   async register({ email, password }: RegisterDto) {
+    const existingUser = await this.usersService.findByEmail(email);
+    if (existingUser) {
+      throw new UnauthorizedException('User already exists');
+    }
+
     const hash = await bcrypt.hash(password, 10);
     const user = await this.usersService.create(email, hash);
 
@@ -38,10 +43,10 @@ export class AuthService {
    */
   async login({ email, password }: LoginDto) {
     const user = await this.usersService.findByEmail(email);
-    if (!user) throw new UnauthorizedException();
+    if (!user) throw new UnauthorizedException('Invalid credentials');
 
     const valid = await bcrypt.compare(password, user.password);
-    if (!valid) throw new UnauthorizedException();
+    if (!valid) throw new UnauthorizedException('Invalid credentials');
 
     return {
       access_token: this.jwtService.sign({
