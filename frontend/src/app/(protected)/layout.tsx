@@ -1,12 +1,13 @@
 "use client"
 
+import BaseLayout from "@/components/BaseLayout"
 import { useAuth } from "@/contexts/AuthContext"
 import { useRouter } from "next/navigation"
 import { PropsWithChildren, useEffect } from "react"
 
-export default function ProtectedLayout({ children }: PropsWithChildren) {
-  const { token, loading } = useAuth()
+export default function Layout({ children }: PropsWithChildren) {
   const router = useRouter()
+  const { token, loading } = useAuth()
 
   useEffect(() => {
     if (!token && !loading) {
@@ -16,5 +17,5 @@ export default function ProtectedLayout({ children }: PropsWithChildren) {
 
   if (!token || loading) return null
 
-  return children
+  return <BaseLayout>{children}</BaseLayout>
 }

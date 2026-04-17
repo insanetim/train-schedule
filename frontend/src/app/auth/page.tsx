@@ -14,7 +14,7 @@ interface AuthFormData {
   password: string
 }
 
-export default function Auth() {
+export default function Page() {
   const router = useRouter()
   const { login } = useAuth()
 

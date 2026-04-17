@@ -6,3 +6,9 @@ export interface Credentials {
 export interface AuthResponse {
   access_token: string
 }
+
+export interface User {
+  id: number
+  email: string
+  createdAt: string
+}
