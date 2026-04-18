@@ -1,4 +1,4 @@
-# Train Schedule
+# Train Schedule App
 
 Project is developed according to the technical specifications located in the `docs` folder.
 
