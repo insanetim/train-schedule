@@ -19,7 +19,7 @@ export const useSchedulesQuery = () => {
   const [sort, setSort] = useState<SortType | string>(
     searchParams.get("sort") || ""
   )
-  const hasQuery = !!(page || from || to || date || sort)
+  const hasQuery = !!(from || to || date || sort)
 
   // Computed query object
   const computedQuery = useMemo((): SchedulesQuery => {
