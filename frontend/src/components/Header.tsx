@@ -7,6 +7,7 @@ import { LogOut } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import Container from "./UI/Container"
 
 export default function Header() {
   const router = useRouter()
@@ -26,50 +27,56 @@ export default function Header() {
         position: "sticky",
         top: 0,
         zIndex: 1000,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        p: 2,
         backgroundColor: "white",
         boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         borderBottom: "1px solid #e0e0e0",
       }}
     >
-      <Link
-        href="/"
-        className="flex items-center gap-2 text-xl font-semibold text-gray-900 hover:text-gray-700"
+      <Container
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 2,
+          py: 2,
+        }}
       >
-        <Image
-          src="/train.png"
-          alt="Train Schedule App"
-          width={40}
-          height={40}
-        />
-        <Box
-          component="span"
-          sx={{
-            display: { xs: "none", sm: "inline" },
-          }}
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-xl font-semibold text-gray-900 hover:text-gray-700"
         >
-          Train Schedule App
-        </Box>
-      </Link>
+          <Image
+            src="/train.png"
+            alt="Train Schedule App"
+            width={40}
+            height={40}
+          />
+          <Box
+            component="span"
+            sx={{
+              display: { xs: "none", sm: "inline" },
+            }}
+          >
+            Train Schedule App
+          </Box>
+        </Link>
 
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <Typography
-          variant="body2"
-          sx={{ color: "#666" }}
-        >
-          {data?.email}
-        </Typography>
-        <IconButton
-          title="Logout"
-          aria-label="logout"
-          onClick={handleLogout}
-        >
-          <LogOut size={18} />
-        </IconButton>
-      </Box>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Typography
+            variant="body2"
+            sx={{ color: "#666" }}
+          >
+            {data?.email}
+          </Typography>
+          <IconButton
+            title="Logout"
+            aria-label="logout"
+            onClick={handleLogout}
+          >
+            <LogOut size={18} />
+          </IconButton>
+        </Box>
+      </Container>
     </Box>
   )
 }

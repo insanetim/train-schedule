@@ -1,6 +1,7 @@
-import { Container, Stack } from "@mui/material"
+import { Stack } from "@mui/material"
 import { PropsWithChildren } from "react"
 import Header from "./Header"
+import Container from "./UI/Container"
 
 const BaseLayout: React.FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -11,7 +12,7 @@ const BaseLayout: React.FC<PropsWithChildren> = ({ children }) => {
       <Header />
       <Container
         component="main"
-        sx={{ flexGrow: 1, py: 3 }}
+        sx={{ flexGrow: 1 }}
       >
         {children}
       </Container>

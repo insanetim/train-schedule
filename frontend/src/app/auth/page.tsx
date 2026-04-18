@@ -1,7 +1,7 @@
 "use client"
 
 import { useLoginMutation, useRegisterMutation } from "@/api/authApiSlice"
-import PasswordInput from "@/components/PasswordInput"
+import PasswordInput from "@/components/UI/PasswordInput"
 import { useAuth } from "@/contexts/AuthContext"
 import showToast from "@/services/toast"
 import { getErrorMessage } from "@/utils/getErrorMessage"
