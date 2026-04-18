@@ -6,20 +6,32 @@ interface SchedulesListProps {
   schedules: Schedule[]
   page: number
   totalPages: number
+  onDelete?: (id: string) => void
+  onPageChange: (page: number) => void
 }
 
 const SchedulesList: React.FC<SchedulesListProps> = ({
   schedules,
   page,
   totalPages,
+  onDelete,
+  onPageChange,
 }) => {
   return (
     <Box>
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Grid
+        container
+        spacing={3}
+        sx={{ mb: 4 }}
+      >
         {schedules.map(schedule => (
-          <Grid size={{ xs: 12, md: 6 }} key={schedule.id}>
+          <Grid
+            size={{ xs: 12, md: 6 }}
+            key={schedule.id}
+          >
             <ScheduleItem
               schedule={schedule}
+              onDelete={onDelete}
             />
           </Grid>
         ))}
@@ -32,6 +44,7 @@ const SchedulesList: React.FC<SchedulesListProps> = ({
             count={totalPages}
             variant="outlined"
             shape="rounded"
+            onChange={(_e, page) => onPageChange(page)}
           />
         </Box>
       )}

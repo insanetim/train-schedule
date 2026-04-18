@@ -35,13 +35,13 @@ export interface PaginatedResponse<T> {
   meta: PaginationMeta
 }
 
-export type Sort = "price_asc" | "price_desc" | "date_asc" | "date_desc"
+export type SortType = "price_asc" | "price_desc" | "date_asc" | "date_desc"
 
 export interface SchedulesQuery {
   from?: string
   to?: string
   date?: string
-  sort?: Sort
+  sort?: SortType
   page?: number
   limit?: number
 }

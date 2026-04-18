@@ -1,15 +1,56 @@
 "use client"
 
-import { useGetSchedulesQuery } from "@/api/schedulesApiSlice"
+import {
+  useDeleteScheduleMutation,
+  useGetSchedulesQuery,
+} from "@/api/schedulesApiSlice"
 import SchedulesList from "@/components/SchedulesList"
+import SearchBar from "@/components/SearchBar"
 import Loading from "@/components/UI/Loading"
+import { useSchedulesQuery } from "@/hooks/useSchedulesQuery"
+import showToast from "@/services/toast"
 import { getErrorMessage } from "@/utils/getErrorMessage"
 import { Alert, Box, Button, Typography } from "@mui/material"
 import { Plus } from "lucide-react"
 import Link from "next/link"
 
 export default function Page() {
-  const { data: schedules, isLoading, error } = useGetSchedulesQuery({})
+  const {
+    from,
+    to,
+    date,
+    sort,
+    hasQuery,
+    debouncedQuery,
+    handlePageChange,
+    handleFromChange,
+    handleToChange,
+    handleDateChange,
+    handleSortChange,
+    handleClear,
+  } = useSchedulesQuery()
+
+  const {
+    data: schedules,
+    isLoading,
+    error,
+  } = useGetSchedulesQuery(debouncedQuery)
+  const [deleteSchedule] = useDeleteScheduleMutation()
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteSchedule(id).unwrap()
+      showToast.success("Schedule deleted successfully")
+
+      // Check if we need to navigate to previous page
+      if (schedules?.data.length === 1 && schedules.meta.page > 1) {
+        handlePageChange(schedules.meta.page - 1)
+      }
+    } catch (error) {
+      console.error(error)
+      showToast.error("Failed to delete snippet")
+    }
+  }
 
   let content
 
@@ -23,7 +64,9 @@ export default function Page() {
         align="center"
         color="textSecondary"
       >
-        No schedules found, create a new one!
+        {hasQuery
+          ? "No results found, try to change filters"
+          : "No schedules found, create a new one!"}
       </Typography>
     )
   } else if (schedules?.data && schedules.data.length > 0) {
@@ -32,6 +75,8 @@ export default function Page() {
         schedules={schedules.data}
         page={schedules.meta.page}
         totalPages={schedules.meta.totalPages}
+        onDelete={handleDelete}
+        onPageChange={handlePageChange}
       />
     )
   }
@@ -62,6 +107,18 @@ export default function Page() {
           Add New
         </Button>
       </Box>
+      <SearchBar
+        from={from}
+        to={to}
+        date={date}
+        sort={sort}
+        hasQuery={hasQuery}
+        handleFromChange={handleFromChange}
+        handleToChange={handleToChange}
+        handleDateChange={handleDateChange}
+        handleSortChange={handleSortChange}
+        handleClear={handleClear}
+      />
       {content}
     </Box>
   )

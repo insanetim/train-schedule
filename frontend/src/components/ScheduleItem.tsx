@@ -1,5 +1,4 @@
 import { Schedule } from "@/types"
-import { formatDate } from "@/utils/dateFormat"
 import { formatPriceDecimal } from "@/utils/priceFormat"
 import {
   Box,
@@ -9,6 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
+import dayjs from "dayjs"
 import {
   Calendar,
   DollarSign,
@@ -22,10 +22,10 @@ import ActionWithConfirm from "./ActionWithConfirm"
 
 interface ScheduleItemProps {
   schedule: Schedule
-  onRemove?: (id: string) => void
+  onDelete?: (id: string) => void
 }
 
-const ScheduleItem: React.FC<ScheduleItemProps> = ({ schedule, onRemove }) => {
+const ScheduleItem: React.FC<ScheduleItemProps> = ({ schedule, onDelete }) => {
   return (
     <Card
       sx={{
@@ -67,7 +67,7 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({ schedule, onRemove }) => {
               variant="body2"
               color="text.secondary"
             >
-              {formatDate(schedule.date)}
+              {dayjs(schedule.date).format("ddd, MMM DD, YYYY")}
             </Typography>
           </Box>
 
@@ -110,7 +110,7 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({ schedule, onRemove }) => {
                   cancelText: "Cancel",
                   confirmButtonColor: "error",
                 }}
-                onConfirm={() => onRemove?.(schedule.id)}
+                onConfirm={() => onDelete?.(schedule.id)}
               >
                 <IconButton
                   color="error"

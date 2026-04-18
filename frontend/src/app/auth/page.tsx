@@ -113,7 +113,7 @@ export default function Page() {
           size="large"
           onClick={handleSubmit(handleLogin)}
           sx={{ flex: 1 }}
-          disabled={isLoading}
+          loading={isLoading}
         >
           Login
         </Button>
@@ -124,7 +124,7 @@ export default function Page() {
           size="large"
           onClick={handleSubmit(handleRegister)}
           sx={{ flex: 1 }}
-          disabled={isLoading}
+          loading={isLoading}
         >
           Register
         </Button>
