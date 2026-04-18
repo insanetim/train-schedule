@@ -9,5 +9,5 @@ Project is developed according to the technical specifications located in the `d
 
 ## ️ Tech Stack
 
-**Backend**: NestJS, TypeScript, PostgreSQL, Prisma
-**Frontend**: Next.js 16, TypeScript, Tailwind, Redux Toolkit, Material-UI
+- **Backend**: NestJS, TypeScript, PostgreSQL, Prisma
+- **Frontend**: Next.js 16, TypeScript, Tailwind, Redux Toolkit, Material-UI
